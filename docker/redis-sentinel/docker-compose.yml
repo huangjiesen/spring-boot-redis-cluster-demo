@@ -1,0 +1,75 @@
+version: '2'
+networks:
+  my_work:
+    external:
+      name: service_network
+services:
+  redis_1:
+    image: redis:5.0.5
+    container_name: redis_1
+    ports:
+      - 6379:6379
+    volumes:
+      - ./config/redis_1.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_1:/data
+      - ./logs/redis_1:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_2:
+    image: redis:5.0.5
+    container_name: redis_2
+    ports:
+      - 6380:6379
+    volumes:
+      - ./config/redis_2.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_2:/data
+      - ./logs/redis_2:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_3:
+    image: redis:5.0.5
+    container_name: redis_3
+    ports:
+      - 6381:6379
+    volumes:
+      - ./config/redis_3.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_3:/data
+      - ./logs/redis_3:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      my_work:
+        ipv4_address: 172.20.0.12
+    restart: always
+  sentinel_1:
+    image: redis:5.0.5
+    container_name: sentinel_1
+    ports:
+      - 26379:26379
+    volumes:
+      - ./config/sentinel_1.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel_1:/data
+      - ./logs/sentinel_1:/logs
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    restart: always
+  sentinel_2:
+    image: redis:5.0.5
+    container_name: sentinel_2
+    ports:
+      - 26380:26379
+    volumes:
+      - ./config/sentinel_2.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel_2:/data
+      - ./logs/sentinel_2:/logs
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    restart: always
+  sentinel_3:
+    image: redis:5.0.5
+    container_name: sentinel_3
+    ports:
+      - 26381:26379
+    volumes:
+      - ./config/sentinel_3.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel_3:/data
+      - ./logs/sentinel_3:/logs
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    restart: always

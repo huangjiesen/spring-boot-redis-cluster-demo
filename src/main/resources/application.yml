@@ -1,0 +1,24 @@
+spring:
+  redis:
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+    zero:
+      password: 123456
+      database: 0
+      sentinel:
+        master: mysentinel
+        nodes: 127.0.0.1:6382,127.0.0.1:6383,127.0.0.1:6384
+    one:
+      password: 123456
+      database: 1
+      sentinel:
+        master: mysentinel
+        nodes: 127.0.0.1:6383,127.0.0.1:6382,127.0.0.1:6384
+
+
+
+
