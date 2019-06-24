@@ -22,9 +22,9 @@ public class RedisTest {
     @Autowired
     @Qualifier("zeroRedisTemplate")
     private RedisTemplate<String, String> zeroRedisTemplate;
-    @Autowired
-    @Qualifier("oneRedisTemplate")
-    private RedisTemplate<String, String> oneRedisTemplate;
+    //@Autowired
+    //@Qualifier("oneRedisTemplate")
+    //private RedisTemplate<String, String> oneRedisTemplate;
 
 
     @Test
@@ -33,9 +33,9 @@ public class RedisTest {
         String hello = zeroRedisTemplate.opsForValue().get("hello");
         Assert.assertEquals(hello,"world");
 
-        oneRedisTemplate.opsForValue().set("name","li shi");
-        String name = oneRedisTemplate.opsForValue().get("name");
-        Assert.assertEquals(name,"li shi");
+        //oneRedisTemplate.opsForValue().set("name","li shi");
+        //String name = oneRedisTemplate.opsForValue().get("name");
+        //Assert.assertEquals(name,"li shi");
     }
 
     @Test

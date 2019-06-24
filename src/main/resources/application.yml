@@ -2,19 +2,19 @@ spring:
   redis:
     jedis:
       pool:
-        max-active: 8
+        max-active: 10
         max-idle: 8
         max-wait: -1ms
         min-idle: 0
     zero:
-      password: 123456
-      database: 0
+      password: "123456"
+      database: 5
       sentinel:
         master: mysentinel
         nodes: 192.168.2.45:26379,192.168.2.45:26380,192.168.2.45:26381
     one:
-      password: 123456
-      database: 1
+      password: "123456"
+      database: 6
       sentinel:
         master: mysentinel
         nodes: 192.168.2.45:26379,192.168.2.45:26380,192.168.2.45:26381

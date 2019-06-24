@@ -38,17 +38,26 @@ public class RedisSentinelConfig {
 
     @Primary
     @Bean("zeroSentinelConfiguration")
+    @ConfigurationProperties(prefix = "spring.redis.zero")
     public RedisSentinelConfiguration zeroSentinelConfiguration(@Qualifier("zeroSentinelProperties")RedisProperties properties){
         return getRedisSentinelConfiguration(properties);
     }
 
+    @Primary
+    @Bean("zeroJedisConnectionFactory")
+    public JedisConnectionFactory zeroJedisConnectionFactory(
+          @Qualifier("zeroSentinelConfiguration")  RedisSentinelConfiguration configuration,
+          @Qualifier("jedisPoolConfig")   JedisPoolConfig jedisPoolConfig) {
+        return new JedisConnectionFactory(configuration, jedisPoolConfig);
+    }
+
     @Bean("zeroRedisTemplate")
     public RedisTemplate<String, String> zeroRedisTemplate(
-            @Qualifier("zeroSentinelConfiguration") RedisSentinelConfiguration configuration,
-            @Qualifier("jedisPoolConfig")JedisPoolConfig jedisPoolConfig
+            @Qualifier("zeroJedisConnectionFactory") JedisConnectionFactory jedisConnectionFactory
     ) {
-        return getRedisTemplate(configuration, jedisPoolConfig);
+        return getRedisTemplate(jedisConnectionFactory);
     }
+
 
 
     @Bean("oneSentinelProperties")
@@ -61,12 +70,18 @@ public class RedisSentinelConfig {
     public RedisSentinelConfiguration oneSentinelConfiguration(@Qualifier("oneSentinelProperties")RedisProperties properties){
         return getRedisSentinelConfiguration(properties);
     }
+    @Bean("oneJedisConnectionFactory")
+    public JedisConnectionFactory oneJedisConnectionFactory(
+         @Qualifier("oneSentinelConfiguration")   RedisSentinelConfiguration configuration,
+         @Qualifier("jedisPoolConfig")   JedisPoolConfig jedisPoolConfig) {
+        return new JedisConnectionFactory(configuration, jedisPoolConfig);
+    }
+
     @Bean("oneRedisTemplate")
     public RedisTemplate<String, String> oneRedisTemplate(
-            @Qualifier("oneSentinelConfiguration") RedisSentinelConfiguration configuration,
-            @Qualifier("jedisPoolConfig") JedisPoolConfig jedisPoolConfig
+            @Qualifier("oneJedisConnectionFactory") JedisConnectionFactory jedisConnectionFactory
     ) {
-        return getRedisTemplate(configuration, jedisPoolConfig);
+        return getRedisTemplate(jedisConnectionFactory);
     }
 
 
@@ -89,9 +104,7 @@ public class RedisSentinelConfig {
         return config;
     }
 
-    private RedisTemplate<String, String> getRedisTemplate(RedisSentinelConfiguration configuration,JedisPoolConfig jedisPoolConfig) {
-        JedisConnectionFactory connectionFactory = new JedisConnectionFactory(configuration, jedisPoolConfig);
-
+    private RedisTemplate<String, String> getRedisTemplate(JedisConnectionFactory connectionFactory) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
