@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
@@ -21,7 +20,7 @@ import java.util.Set;
  * @author HuangJS
  * @date 2019-06-22 6:40 PM
  */
-@Configuration
+//@Configuration
 public class RedisSentinelConfig {
     @Bean("jedisPoolConfig")
     @ConfigurationProperties(prefix = "spring.redis.jedis.pool")
