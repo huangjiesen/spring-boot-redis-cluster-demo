@@ -36,9 +36,6 @@ services:
       - ./data/redis_3:/data
       - ./logs/redis_3:/logs
     command: redis-server /usr/local/etc/redis/redis.conf
-    networks:
-      my_work:
-        ipv4_address: 172.20.0.12
     restart: always
   sentinel_1:
     image: redis:5.0.5
