@@ -21,7 +21,7 @@ import java.util.Set;
  * @date 2019-06-22 6:40 PM
  */
 //@Configuration
-public class RedisSentinelConfig {
+public class JedisSentinelConfig {
     @Bean("jedisPoolConfig")
     @ConfigurationProperties(prefix = "spring.redis.jedis.pool")
     public JedisPoolConfig jedisPoolConfig() {

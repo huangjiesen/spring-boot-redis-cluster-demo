@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-06-23 3:54 PM
  */
 @RestController
-@RequestMapping("redis_sentinel")
-public class RedisSentinelControlller {
+@RequestMapping("jedis_sentinel")
+public class JedisSentinelControlller {
     @Autowired
     @Qualifier("zeroSentinelRedisTemplate")
     private RedisTemplate<String, String> zeroRedisTemplate;
