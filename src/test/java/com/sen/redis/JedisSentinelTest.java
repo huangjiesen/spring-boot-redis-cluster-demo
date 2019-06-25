@@ -20,14 +20,14 @@ import java.time.format.DateTimeFormatter;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RedisTest {
-    private final Logger logger = LoggerFactory.getLogger(RedisTest.class);
+public class JedisSentinelTest {
+    private final Logger logger = LoggerFactory.getLogger(JedisSentinelTest.class);
     @Autowired
     @Qualifier("zeroSentinelRedisTemplate")
     private RedisTemplate<String, String> zeroRedisTemplate;
-    //@Autowired
-    //@Qualifier("oneRedisTemplate")
-    //private RedisTemplate<String, String> oneRedisTemplate;
+    @Autowired
+    @Qualifier("oneSentinelRedisTemplate")
+    private RedisTemplate<String, String> oneRedisTemplate;
 
 
     @Test
@@ -36,9 +36,9 @@ public class RedisTest {
         String hello = zeroRedisTemplate.opsForValue().get("hello");
         Assert.assertEquals(hello,"world");
 
-        //oneRedisTemplate.opsForValue().set("name","li shi");
-        //String name = oneRedisTemplate.opsForValue().get("name");
-        //Assert.assertEquals(name,"li shi");
+        oneRedisTemplate.opsForValue().set("name","li shi");
+        String name = oneRedisTemplate.opsForValue().get("name");
+        Assert.assertEquals(name,"li shi");
     }
 
     @Test

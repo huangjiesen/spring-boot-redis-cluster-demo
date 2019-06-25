@@ -6,13 +6,6 @@ spring:
         max-idle: 8
         max-wait: -1ms
         min-idle: 0
-    lettuce:
-      pool:
-        max-active: 10
-        max-idle: 8
-        max-wait: -1ms
-        min-idle: 0
-        time-between-eviction-runs:
     zero:
       password: "123456"
       database: 0
@@ -31,12 +24,24 @@ spring:
       sentinel:
         master: mysentinel
         nodes: 192.168.2.45:26379,192.168.2.45:26380,192.168.2.45:26381
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 8
+          max-wait: -1ms
+          min-idle: 0
     three:
       password: "123456"
       database: 3
       sentinel:
         master: mysentinel
         nodes: 192.168.2.45:26379,192.168.2.45:26380,192.168.2.45:26381
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 8
+          max-wait: -1ms
+          min-idle: 0
 
 
 

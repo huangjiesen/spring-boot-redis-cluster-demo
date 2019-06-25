@@ -1,19 +1,19 @@
 package com.sen.redis.config;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,62 +24,42 @@ import java.util.Set;
  */
 @Configuration
 public class LettuceSentinelConfig {
-
-    @Primary
-    @Bean("zeroSentinelProperties")
-    @ConfigurationProperties(prefix = "spring.redis.zero")
-    public RedisProperties zeroSentinelProperties() {
+    @Bean("twoSentinelProperties")
+    @ConfigurationProperties(prefix = "spring.redis.two")
+    public RedisProperties twoSentinelProperties() {
         return new RedisProperties();
     }
 
-    @Primary
-    @Bean("zeroSentinelConfiguration")
-    @ConfigurationProperties(prefix = "spring.redis.zero")
-    public RedisSentinelConfiguration zeroSentinelConfiguration(@Qualifier("zeroSentinelProperties")RedisProperties properties){
-        return getRedisSentinelConfiguration(properties);
+    @Bean("twoSentinelConnectionFactory")
+    public RedisConnectionFactory twoRedisConnectionFactory(@Qualifier("twoSentinelProperties") RedisProperties properties) {
+        return getRedisConnectionFactory(properties);
     }
 
-    @Primary
-    @Bean("zeroSentinelConnectionFactory")
-    public JedisConnectionFactory zeroJedisConnectionFactory(
-          @Qualifier("zeroSentinelConfiguration")  RedisSentinelConfiguration configuration,
-          @Qualifier("jedisPoolConfig")   JedisPoolConfig jedisPoolConfig) {
-        return new JedisConnectionFactory(configuration, jedisPoolConfig);
-    }
-
-    @Bean("zeroSentinelRedisTemplate")
+    @Bean("twoSentinelRedisTemplate")
     public RedisTemplate<String, String> zeroRedisTemplate(
-            @Qualifier("zeroSentinelConnectionFactory") JedisConnectionFactory jedisConnectionFactory
+            @Qualifier("twoSentinelConnectionFactory") RedisConnectionFactory redisConnectionFactory
     ) {
-        return getRedisTemplate(jedisConnectionFactory);
+        return getRedisTemplate(redisConnectionFactory);
     }
 
 
-
-    @Bean("oneSentinelProperties")
-    @ConfigurationProperties(prefix = "spring.redis.one")
-    public RedisProperties oneSentinelProperties() {
+    @Bean("threeSentinelProperties")
+    @ConfigurationProperties(prefix = "spring.redis.three")
+    public RedisProperties threeSentinelProperties() {
         return new RedisProperties();
     }
 
-    @Bean("oneSentinelConfiguration")
-    public RedisSentinelConfiguration oneSentinelConfiguration(@Qualifier("oneSentinelProperties")RedisProperties properties){
-        return getRedisSentinelConfiguration(properties);
-    }
-    @Bean("oneSentinelConnectionFactory")
-    public JedisConnectionFactory oneJedisConnectionFactory(
-         @Qualifier("oneSentinelConfiguration") RedisSentinelConfiguration configuration,
-         @Qualifier("jedisPoolConfig") JedisPoolConfig jedisPoolConfig) {
-        return new JedisConnectionFactory(configuration, jedisPoolConfig);
+    @Bean("threeSentinelConnectionFactory")
+    public RedisConnectionFactory threeRedisConnectionFactory(@Qualifier("threeSentinelProperties") RedisProperties properties) {
+        return getRedisConnectionFactory(properties);
     }
 
-    @Bean("oneSentinelRedisTemplate")
-    public RedisTemplate<String, String> oneRedisTemplate(
-            @Qualifier("oneSentinelConnectionFactory") JedisConnectionFactory jedisConnectionFactory
+    @Bean("threeSentinelRedisTemplate")
+    public RedisTemplate<String, String> threeRedisTemplate(
+            @Qualifier("threeSentinelConnectionFactory") RedisConnectionFactory redisConnectionFactory
     ) {
-        return getRedisTemplate(jedisConnectionFactory);
+        return getRedisTemplate(redisConnectionFactory);
     }
-
 
     private RedisSentinelConfiguration getRedisSentinelConfiguration(RedisProperties properties) {
         RedisProperties.Sentinel sentinel = properties.getSentinel();
@@ -100,6 +80,23 @@ public class LettuceSentinelConfig {
         return config;
     }
 
+    private RedisConnectionFactory getRedisConnectionFactory(RedisProperties properties){
+        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+        RedisProperties.Pool pool = properties.getLettuce().getPool();
+        poolConfig.setMaxTotal(pool.getMaxActive());
+        poolConfig.setMinIdle(pool.getMinIdle());
+        poolConfig.setMaxIdle(pool.getMaxIdle());
+        poolConfig.setMaxWaitMillis(pool.getMaxWait().toMillis());
+
+        LettucePoolingClientConfiguration.LettucePoolingClientConfigurationBuilder builder = LettucePoolingClientConfiguration.builder();
+        builder.poolConfig(poolConfig);
+        if (properties.getTimeout() != null) {
+            builder.commandTimeout(properties.getTimeout());
+        }
+
+        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(getRedisSentinelConfiguration(properties), builder.build());
+        return connectionFactory;
+    }
 
     private RedisTemplate<String, String> getRedisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
