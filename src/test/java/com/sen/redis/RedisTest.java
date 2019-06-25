@@ -3,6 +3,8 @@ package com.sen.redis;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +21,9 @@ import java.time.format.DateTimeFormatter;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RedisTest {
+    private final Logger logger = LoggerFactory.getLogger(RedisTest.class);
     @Autowired
-    @Qualifier("zeroRedisTemplate")
+    @Qualifier("zeroSentinelRedisTemplate")
     private RedisTemplate<String, String> zeroRedisTemplate;
     //@Autowired
     //@Qualifier("oneRedisTemplate")
@@ -41,13 +44,14 @@ public class RedisTest {
     @Test
     public void keepWrite() throws InterruptedException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("y-M-d H:m:s.S");
+        String now = null;
         while (true) {
-            String now = LocalDateTime.now().format(formatter);
             try {
-                System.out.println(now);
+                now = LocalDateTime.now().format(formatter);
+                logger.info("new:{}", now);
                 zeroRedisTemplate.opsForValue().set("now",now);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info("new:{},errMsg:{}", now, e.getMessage());
             }
             Thread.sleep(1000);
         }

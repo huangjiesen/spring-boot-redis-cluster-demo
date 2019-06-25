@@ -8,13 +8,13 @@ spring:
         min-idle: 0
     zero:
       password: "123456"
-      database: 5
+      database: 0
       sentinel:
         master: mysentinel
         nodes: 192.168.2.45:26379,192.168.2.45:26380,192.168.2.45:26381
     one:
       password: "123456"
-      database: 6
+      database: 1
       sentinel:
         master: mysentinel
         nodes: 192.168.2.45:26379,192.168.2.45:26380,192.168.2.45:26381

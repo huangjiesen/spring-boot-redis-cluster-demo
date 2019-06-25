@@ -43,16 +43,16 @@ public class RedisSentinelConfig {
     }
 
     @Primary
-    @Bean("zeroJedisConnectionFactory")
+    @Bean("zeroSentinelConnectionFactory")
     public JedisConnectionFactory zeroJedisConnectionFactory(
           @Qualifier("zeroSentinelConfiguration")  RedisSentinelConfiguration configuration,
           @Qualifier("jedisPoolConfig")   JedisPoolConfig jedisPoolConfig) {
         return new JedisConnectionFactory(configuration, jedisPoolConfig);
     }
 
-    @Bean("zeroRedisTemplate")
+    @Bean("zeroSentinelRedisTemplate")
     public RedisTemplate<String, String> zeroRedisTemplate(
-            @Qualifier("zeroJedisConnectionFactory") JedisConnectionFactory jedisConnectionFactory
+            @Qualifier("zeroSentinelConnectionFactory") JedisConnectionFactory jedisConnectionFactory
     ) {
         return getRedisTemplate(jedisConnectionFactory);
     }
@@ -69,16 +69,16 @@ public class RedisSentinelConfig {
     public RedisSentinelConfiguration oneSentinelConfiguration(@Qualifier("oneSentinelProperties")RedisProperties properties){
         return getRedisSentinelConfiguration(properties);
     }
-    @Bean("oneJedisConnectionFactory")
+    @Bean("oneSentinelConnectionFactory")
     public JedisConnectionFactory oneJedisConnectionFactory(
-         @Qualifier("oneSentinelConfiguration")   RedisSentinelConfiguration configuration,
-         @Qualifier("jedisPoolConfig")   JedisPoolConfig jedisPoolConfig) {
+         @Qualifier("oneSentinelConfiguration") RedisSentinelConfiguration configuration,
+         @Qualifier("jedisPoolConfig") JedisPoolConfig jedisPoolConfig) {
         return new JedisConnectionFactory(configuration, jedisPoolConfig);
     }
 
-    @Bean("oneRedisTemplate")
+    @Bean("oneSentinelRedisTemplate")
     public RedisTemplate<String, String> oneRedisTemplate(
-            @Qualifier("oneJedisConnectionFactory") JedisConnectionFactory jedisConnectionFactory
+            @Qualifier("oneSentinelConnectionFactory") JedisConnectionFactory jedisConnectionFactory
     ) {
         return getRedisTemplate(jedisConnectionFactory);
     }

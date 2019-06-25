@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-06-23 3:54 PM
  */
 @RestController
-@RequestMapping("redis")
-public class RedisControlller {
+@RequestMapping("redis_sentinel")
+public class RedisSentinelControlller {
     @Autowired
-    @Qualifier("zeroRedisTemplate")
+    @Qualifier("zeroSentinelRedisTemplate")
     private RedisTemplate<String, String> zeroRedisTemplate;
     @Autowired
-    @Qualifier("oneRedisTemplate")
+    @Qualifier("oneSentinelRedisTemplate")
     private RedisTemplate<String, String> oneRedisTemplate;
 
 
@@ -32,6 +32,7 @@ public class RedisControlller {
         }
         throw new RuntimeException("redis db does not exist:" + db);
     }
+
     @GetMapping("set")
     public String set(@RequestParam(defaultValue = "0") int db, String key, String value) {
         getDB(db).opsForValue().set(key, value);
