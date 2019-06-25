@@ -54,6 +54,7 @@ public class JedisSentinelConfig {
     public RedisTemplate<String, String> zeroRedisTemplate(
             @Qualifier("zeroSentinelConnectionFactory") JedisConnectionFactory jedisConnectionFactory
     ) {
+        // JedisConnectionFactory 必须通过bean注入，在此new会导致获取不到连接池
         return getRedisTemplate(jedisConnectionFactory);
     }
 
@@ -80,6 +81,7 @@ public class JedisSentinelConfig {
     public RedisTemplate<String, String> oneRedisTemplate(
             @Qualifier("oneSentinelConnectionFactory") JedisConnectionFactory jedisConnectionFactory
     ) {
+        // JedisConnectionFactory 必须通过bean注入，在此new会导致获取不到连接池
         return getRedisTemplate(jedisConnectionFactory);
     }
 

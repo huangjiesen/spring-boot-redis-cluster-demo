@@ -1,0 +1,75 @@
+version: '2'
+services:
+  redis_7001:
+    image: redis:5.0.5
+    container_name: redis_7001
+    ports:
+      - 7001:7001
+      - 17001:17001
+    volumes:
+      - ./config/redis_7001.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_7001:/data
+      - ./logs/redis_7001:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_7002:
+    image: redis:5.0.5
+    container_name: redis_7002
+    ports:
+      - 7002:7002
+      - 17002:17002
+    volumes:
+      - ./config/redis_7002.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_7002:/data
+      - ./logs/redis_7002:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_7003:
+    image: redis:5.0.5
+    container_name: redis_7003
+    ports:
+      - 7003:7003
+      - 17003:17003
+    volumes:
+      - ./config/redis_7003.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_7003:/data
+      - ./logs/redis_7003:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_7004:
+    image: redis:5.0.5
+    container_name: redis_7004
+    ports:
+      - 7004:7004
+      - 17004:17004
+    volumes:
+      - ./config/redis_7004.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_7004:/data
+      - ./logs/redis_7004:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_7005:
+    image: redis:5.0.5
+    container_name: redis_7005
+    ports:
+      - 7005:7005
+      - 17005:17005
+    volumes:
+      - ./config/redis_7005.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_7005:/data
+      - ./logs/redis_7005:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  redis_7006:
+    image: redis:5.0.5
+    container_name: redis_7006
+    ports:
+      - 7006:7006
+      - 17006:17006
+    volumes:
+      - ./config/redis_7006.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis_7006:/data
+      - ./logs/redis_7006:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+
