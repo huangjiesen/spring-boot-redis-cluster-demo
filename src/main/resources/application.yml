@@ -1,6 +1,5 @@
 spring:
   redis:
-
     jedis:
       pool:
         max-active: 10
@@ -56,7 +55,13 @@ spring:
         - 192.168.2.45:7003
         - 192.168.2.45:7004
         - 192.168.2.45:7005
-
+    lettuce:
+      shutdown-timeout: 100ms
+      pool:
+        max-active: 10
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
 
 
 

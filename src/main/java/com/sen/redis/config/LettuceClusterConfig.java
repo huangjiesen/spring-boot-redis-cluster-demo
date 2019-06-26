@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisNode;
-import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,79 +22,47 @@ import java.util.Set;
  * @date 2019-06-22 6:40 PM
  */
 //@Configuration
-public class LettuceSentinelConfig {
-    @Bean("twoSentinelProperties")
-    @ConfigurationProperties(prefix = "spring.redis.two")
-    public RedisProperties twoSentinelProperties() {
+public class LettuceClusterConfig {
+    @Bean("lettuceClusterProperties")
+    @ConfigurationProperties(prefix = "spring.redis")
+    public RedisProperties lettuceClusterProperties() {
         return new RedisProperties();
     }
 
-    @Bean("twoSentinelConnectionFactory")
-    public RedisConnectionFactory twoRedisConnectionFactory(@Qualifier("twoSentinelProperties") RedisProperties properties) {
-        return getRedisConnectionFactory(properties);
-    }
 
-    @Bean("twoSentinelRedisTemplate")
-    public RedisTemplate<String, String> zeroRedisTemplate(
-            @Qualifier("twoSentinelConnectionFactory") RedisConnectionFactory redisConnectionFactory
-    ) {
-        return getRedisTemplate(redisConnectionFactory);
-    }
-
-
-    @Bean("threeSentinelProperties")
-    @ConfigurationProperties(prefix = "spring.redis.three")
-    public RedisProperties threeSentinelProperties() {
-        return new RedisProperties();
-    }
-
-    @Bean("threeSentinelConnectionFactory")
-    public RedisConnectionFactory threeRedisConnectionFactory(@Qualifier("threeSentinelProperties") RedisProperties properties) {
-        return getRedisConnectionFactory(properties);
-    }
-
-    @Bean("threeSentinelRedisTemplate")
-    public RedisTemplate<String, String> threeRedisTemplate(
-            @Qualifier("threeSentinelConnectionFactory") RedisConnectionFactory redisConnectionFactory
-    ) {
-        return getRedisTemplate(redisConnectionFactory);
-    }
-
-    private RedisSentinelConfiguration getRedisSentinelConfiguration(RedisProperties properties) {
-        RedisProperties.Sentinel sentinel = properties.getSentinel();
+    @Bean("lettuceClusterConnectionFactory")
+    public RedisConnectionFactory lettuceClusterConnectionFactory(@Qualifier("lettuceClusterProperties") RedisProperties properties) {
+        RedisProperties.Cluster cluster = properties.getCluster();
         Set<RedisNode> redisNodeSet = new HashSet<>();
-        sentinel.getNodes().forEach(x->{
+        cluster.getNodes().forEach(x->{
             String[] link = x.split(":");
             redisNodeSet.add(new RedisNode(link[0],Integer.parseInt(link[1])));
         });
 
-        RedisSentinelConfiguration config = new RedisSentinelConfiguration();
-        config.master(sentinel.getMaster());
-        config.setDatabase(properties.getDatabase());
+        RedisClusterConfiguration config = new RedisClusterConfiguration();
         config.setPassword(properties.getPassword());
-        if (redisNodeSet.isEmpty()) {
-           throw new RuntimeException("sentinel nodes is empty");
-        }
-        config.setSentinels(redisNodeSet);
-        return config;
-    }
+        config.setMaxRedirects(cluster.getMaxRedirects());
+        config.setClusterNodes(redisNodeSet);
 
-    private RedisConnectionFactory getRedisConnectionFactory(RedisProperties properties){
-        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
         RedisProperties.Pool pool = properties.getLettuce().getPool();
+        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
         poolConfig.setMaxTotal(pool.getMaxActive());
         poolConfig.setMinIdle(pool.getMinIdle());
         poolConfig.setMaxIdle(pool.getMaxIdle());
         poolConfig.setMaxWaitMillis(pool.getMaxWait().toMillis());
-
         LettucePoolingClientConfiguration.LettucePoolingClientConfigurationBuilder builder = LettucePoolingClientConfiguration.builder();
         builder.poolConfig(poolConfig);
         if (properties.getTimeout() != null) {
             builder.commandTimeout(properties.getTimeout());
         }
+        return new LettuceConnectionFactory(config, builder.build());
+    }
 
-        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(getRedisSentinelConfiguration(properties), builder.build());
-        return connectionFactory;
+    @Bean("lettuceClusterRedisTemplate")
+    public RedisTemplate<String, String> zeroRedisTemplate(
+            @Qualifier("lettuceClusterConnectionFactory") RedisConnectionFactory redisConnectionFactory
+    ) {
+        return getRedisTemplate(redisConnectionFactory);
     }
 
     private RedisTemplate<String, String> getRedisTemplate(RedisConnectionFactory connectionFactory) {
@@ -107,5 +75,4 @@ public class LettuceSentinelConfig {
         redisTemplate.setHashValueSerializer(stringSerializer);
         return redisTemplate;
     }
-
 }
