@@ -1,5 +1,6 @@
 spring:
   redis:
+
     jedis:
       pool:
         max-active: 10
@@ -42,6 +43,21 @@ spring:
           max-idle: 8
           max-wait: -1ms
           min-idle: 0
+
+    timeout: 6000ms
+    password: 123456
+    # 集群只支持1个db
+    cluster:
+      max-redirects: 3
+      nodes:
+        - 192.168.2.45:7006
+        - 192.168.2.45:7001
+        - 192.168.2.45:7002
+        - 192.168.2.45:7003
+        - 192.168.2.45:7004
+        - 192.168.2.45:7005
+
+
 
 
 

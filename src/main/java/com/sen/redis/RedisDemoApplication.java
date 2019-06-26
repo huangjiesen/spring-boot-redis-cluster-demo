@@ -1,5 +1,6 @@
 package com.sen.redis;
 
+import com.sen.redis.config.JedisClusterConfig;
 import com.sen.redis.config.JedisSentinelConfig;
 import com.sen.redis.config.LettuceSentinelConfig;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +10,8 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import({
     JedisSentinelConfig.class,
-    LettuceSentinelConfig.class
+    LettuceSentinelConfig.class,
+    JedisClusterConfig.class
 })
 public class RedisDemoApplication {
 
