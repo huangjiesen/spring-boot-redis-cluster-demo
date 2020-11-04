@@ -4,7 +4,7 @@ services:
     image: redis:6.0.9
     container_name: redis1
     ports:
-      - 6379:6379
+      - 7379:6379
     volumes:
       - ./config/redis1.conf:/usr/local/etc/redis/redis.conf
       - ./data/redis1:/data
@@ -15,7 +15,7 @@ services:
     image: redis:6.0.9
     container_name: redis2
     ports:
-      - 6380:6379
+      - 7380:6379
     volumes:
       - ./config/redis2.conf:/usr/local/etc/redis/redis.conf
       - ./data/redis2:/data
@@ -26,7 +26,7 @@ services:
     image: redis:6.0.9
     container_name: redis3
     ports:
-      - 6381:6379
+      - 7381:6379
     volumes:
       - ./config/redis3.conf:/usr/local/etc/redis/redis.conf
       - ./data/redis3:/data
@@ -37,7 +37,7 @@ services:
     image: redis:6.0.9
     container_name: redis_sentinel1
     ports:
-      - 26379:26379
+      - 27379:26379
     volumes:
       - ./config/redis_sentinel1.conf:/usr/local/etc/redis/sentinel.conf
       - ./data/redis_sentinel1:/data
@@ -48,7 +48,7 @@ services:
     image: redis:6.0.9
     container_name: redis_sentinel2
     ports:
-      - 26380:26379
+      - 27380:26379
     volumes:
       - ./config/redis_sentinel2.conf:/usr/local/etc/redis/sentinel.conf
       - ./data/redis_sentinel2:/data
@@ -59,7 +59,7 @@ services:
     image: redis:6.0.9
     container_name: redis_sentinel3
     ports:
-      - 26381:26379
+      - 27381:26379
     volumes:
       - ./config/redis_sentinel3.conf:/usr/local/etc/redis/sentinel.conf
       - ./data/redis_sentinel3:/data
