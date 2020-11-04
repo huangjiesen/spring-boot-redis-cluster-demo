@@ -39,9 +39,9 @@ services:
     ports:
       - 27379:26379
     volumes:
-      - ./config/redis_sentinel1.conf:/usr/local/etc/redis/sentinel.conf
-      - ./data/redis_sentinel1:/data
-      - ./logs/redis_sentinel1:/logs
+      - ./config/sentinel1.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel1:/data
+      - ./logs/sentinel1:/logs
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     restart: always
   redis_sentinel2:
@@ -50,9 +50,9 @@ services:
     ports:
       - 27380:26379
     volumes:
-      - ./config/redis_sentinel2.conf:/usr/local/etc/redis/sentinel.conf
-      - ./data/redis_sentinel2:/data
-      - ./logs/redis_sentinel2:/logs
+      - ./config/sentinel2.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel2:/data
+      - ./logs/sentinel2:/logs
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     restart: always
   redis_sentinel3:
@@ -61,8 +61,8 @@ services:
     ports:
       - 27381:26379
     volumes:
-      - ./config/redis_sentinel3.conf:/usr/local/etc/redis/sentinel.conf
-      - ./data/redis_sentinel3:/data
-      - ./logs/redis_sentinel3:/logs
+      - ./config/sentinel3.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel3:/data
+      - ./logs/sentinel3:/logs
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     restart: always
