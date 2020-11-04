@@ -1,72 +1,68 @@
 version: '2'
-networks:
-  default:
-    external:
-      name: service_network
 services:
-  redis_1:
-    image: redis:5.0.5
-    container_name: redis_1
+  redis1:
+    image: redis:6.0.9
+    container_name: redis1
     ports:
       - 6379:6379
     volumes:
-      - ./config/redis_1.conf:/usr/local/etc/redis/redis.conf
-      - ./data/redis_1:/data
-      - ./logs/redis_1:/logs
+      - ./config/redis1.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis1:/data
+      - ./logs/redis1:/logs
     command: redis-server /usr/local/etc/redis/redis.conf
     restart: always
-  redis_2:
-    image: redis:5.0.5
-    container_name: redis_2
+  redis2:
+    image: redis:6.0.9
+    container_name: redis2
     ports:
       - 6380:6379
     volumes:
-      - ./config/redis_2.conf:/usr/local/etc/redis/redis.conf
-      - ./data/redis_2:/data
-      - ./logs/redis_2:/logs
+      - ./config/redis2.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis2:/data
+      - ./logs/redis2:/logs
     command: redis-server /usr/local/etc/redis/redis.conf
     restart: always
-  redis_3:
-    image: redis:5.0.5
-    container_name: redis_3
+  redis3:
+    image: redis:6.0.9
+    container_name: redis3
     ports:
       - 6381:6379
     volumes:
-      - ./config/redis_3.conf:/usr/local/etc/redis/redis.conf
-      - ./data/redis_3:/data
-      - ./logs/redis_3:/logs
+      - ./config/redis3.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis3:/data
+      - ./logs/redis3:/logs
     command: redis-server /usr/local/etc/redis/redis.conf
     restart: always
-  sentinel_1:
-    image: redis:5.0.5
-    container_name: sentinel_1
+  redis_sentinel1:
+    image: redis:6.0.9
+    container_name: redis_sentinel1
     ports:
       - 26379:26379
     volumes:
-      - ./config/sentinel_1.conf:/usr/local/etc/redis/sentinel.conf
-      - ./data/sentinel_1:/data
-      - ./logs/sentinel_1:/logs
+      - ./config/redis_sentinel1.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/redis_sentinel1:/data
+      - ./logs/redis_sentinel1:/logs
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     restart: always
-  sentinel_2:
-    image: redis:5.0.5
-    container_name: sentinel_2
+  redis_sentinel2:
+    image: redis:6.0.9
+    container_name: redis_sentinel2
     ports:
       - 26380:26379
     volumes:
-      - ./config/sentinel_2.conf:/usr/local/etc/redis/sentinel.conf
-      - ./data/sentinel_2:/data
-      - ./logs/sentinel_2:/logs
+      - ./config/redis_sentinel2.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/redis_sentinel2:/data
+      - ./logs/redis_sentinel2:/logs
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     restart: always
-  sentinel_3:
-    image: redis:5.0.5
-    container_name: sentinel_3
+  redis_sentinel3:
+    image: redis:6.0.9
+    container_name: redis_sentinel3
     ports:
       - 26381:26379
     volumes:
-      - ./config/sentinel_3.conf:/usr/local/etc/redis/sentinel.conf
-      - ./data/sentinel_3:/data
-      - ./logs/sentinel_3:/logs
+      - ./config/redis_sentinel3.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/redis_sentinel3:/data
+      - ./logs/redis_sentinel3:/logs
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     restart: always
