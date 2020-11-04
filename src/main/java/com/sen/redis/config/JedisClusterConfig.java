@@ -21,6 +21,7 @@ import java.util.Set;
  */
 //@Configuration
 public class JedisClusterConfig {
+
     @Bean("clusterPoolConfig")
     @ConfigurationProperties(prefix = "spring.redis.jedis.pool")
     public JedisPoolConfig jedisClusterPoolConfig() {
